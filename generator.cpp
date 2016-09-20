@@ -42,9 +42,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    //get_mst(graph, INITIAL_VERTEX, n);
-    //cout << "Brute force have found this answer: " << solve_brute(graph, n) << endl;
-    //cout << "Branch and bound have found this answer: " << solve_branch_and_bound(graph, n) << endl;
+    get_mst(graph, INITIAL_VERTEX, n);
+    cout << "Brute force have found this answer: " << solve_brute(graph, n) << endl;
+    cout << "Branch and bound have found this answer: " << solve_branch_and_bound(graph, n) << endl;
     if (argc<=2) {
         cout << "Annealing imitation have found this answer: " << solve_annealing(graph, n) << endl;
         cout << "2-OPT greedy solution have found this answer: " << solve_optimal20(graph, n) << endl;
