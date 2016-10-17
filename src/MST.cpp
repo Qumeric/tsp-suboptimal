@@ -9,7 +9,7 @@ MST::MST(const Graph &g, size_t initial_vertex, const vector<size_t> &banned) {
     size_t n = g.getSize();
     vector<bool> used(n);
     // {minimal distance from observed set ([v from g | used[v] == true]), closest vertex from observed set}
-    vector<pair<double, size_t>> dist(n);
+    vector<std::pair<double, size_t>> dist(n);
     mst.resize(n);
     length = 0;
 
@@ -28,9 +28,9 @@ MST::MST(const Graph &g, size_t initial_vertex, const vector<size_t> &banned) {
         used[nxt] = true;
         length += dist[nxt].first;
         mst[dist[nxt].second].push_back(nxt);
-        for (size_t i = 0; i < n; i++) {
-            if (g.getDistance(nxt, i) < dist[i].first)
-                dist[i] = {g.getDistance(nxt, i), nxt};
+        for (size_t j = 0; j < n; j++) {
+            if (g.getDistance(nxt, j) < dist[j].first)
+                dist[j] = {g.getDistance(nxt, j), nxt};
         }
     }
 }
@@ -41,4 +41,5 @@ double MST::getLength() const {
 
 vector<vector<size_t>> MST::toAdjList() const {
     return mst;
+
 }

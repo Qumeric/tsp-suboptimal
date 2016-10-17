@@ -1,5 +1,5 @@
 #include <vector>
-#include "Helpers.h"
+#include <Helpers.h>
 
 using namespace std;
 
@@ -24,4 +24,16 @@ vector<size_t> Helpers::get_euler_cycle(const vector<vector<size_t>> &tree, size
     vector<size_t> answer;
     get_euler_cycle_rec(tree, v, answer);
     return answer;
+}
+
+/**
+ * @param g A Graph instance which provides distances
+ * @param cycle A series of vertices. Shouldn't contain repeted ones.
+ * @return Length of given cycle.
+ */
+double Helpers::calc_length(const Graph &g, const vector<size_t> &cycle) {
+    double length = g.getDistance(cycle.back(), cycle.front());
+    for (size_t i = 0; i < cycle.size() - 1; i++)
+        length += g.getDistance(cycle[i], cycle[i + 1]);
+    return length;
 }

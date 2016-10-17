@@ -1,4 +1,5 @@
 #include <Graph.h>
+#include <Helpers.h>
 
 vector<Point> Graph::generateRandomPoints(size_t count) {
     const size_t MAX_CORD = 1000;

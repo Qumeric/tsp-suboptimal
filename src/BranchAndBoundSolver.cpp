@@ -1,8 +1,10 @@
 #include <vector>
 #include <MST.h>
 #include <BranchAndBoundSolver.h>
+#include <numeric>
+#include <algorithm>
 
-double BranchAndBoundSolver::solve_(const Graph& g, size_t current_vertex, double weight, size_t initial_vertex) {
+double BranchAndBoundSolver::solve_(size_t current_vertex, double weight, size_t initial_vertex) {
     size_t n = g.getSize();
     used[current_vertex] = true;
     path.push_back(current_vertex);
@@ -15,7 +17,7 @@ double BranchAndBoundSolver::solve_(const Graph& g, size_t current_vertex, doubl
     size_t mst_init;
     bool mst_initialized = false;
 
-    // FIXME one vertex problem
+    // FIXME one vertex problem (sometimes can't find the most optimal solution...)
     double shortestA = INF, shortestB = INF;
     for (size_t i = 0; i < n; i++) {
         if (used[i]) continue;
@@ -24,18 +26,23 @@ double BranchAndBoundSolver::solve_(const Graph& g, size_t current_vertex, doubl
             mst_init = i;
             mst_initialized = true;
         }
-        shortestB = min(shortestB, g.getDistance(current_vertex, i));
+        shortestB = std::min(shortestB, g.getDistance(current_vertex, i));
     }
 
     if (mst_initialized) {
         mst_len = MST(g, mst_init, path).getLength();
     }
 
-    for (size_t i = 0; i < n; i++) { // FIXME randomized/sorted
+    vector<size_t> seq(n);
+    std::iota(seq.begin(), seq.end(), 0);
+    std::random_shuffle(seq.begin(), seq.end());
+
+
+    for (size_t i: seq) { // randomized for better performance
         if (!used[i]) {
             found = true;
             if (weight + shortestA + shortestB + mst_len < ans) {
-                solve_(g, i, weight + g.getDistance(current_vertex, i), initial_vertex);
+                solve_(i, weight + g.getDistance(current_vertex, i), initial_vertex);
             }
         }
     }
@@ -50,8 +57,9 @@ double BranchAndBoundSolver::solve_(const Graph& g, size_t current_vertex, doubl
     return ans;
 }
 
-double BranchAndBoundSolver::solve(const Graph& g, size_t initial_vertex ) {
+double BranchAndBoundSolver::solve(size_t initial_vertex) {
     used.resize(g.getSize());
     std::fill(used.begin(), used.end(), 0);
-    return solve_(g, initial_vertex, 0, initial_vertex);
+    return answer = solve_(initial_vertex, 0, initial_vertex);
 }
+

@@ -12,7 +12,12 @@
 #include <AntSolver.h>
 #include <BranchAndBoundSolver.h>
 
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "CannotResolve"
 int main(int argc, char *argv[]) {
+    using std::cout;
+    using std::endl;
     if (argc == 1) {
         std::cout << "Usage: ./tsp <number-of-points>" << std::endl;
         return 0;
@@ -22,20 +27,27 @@ int main(int argc, char *argv[]) {
 
     Graph g(n);
 
-    ISolver *bruteForce = new BruteforceSolver;
-    ISolver *annealingSolver = new AnnealingSolver;
-    ISolver *closestNeighbourSolver = new ClosestNeighbourSolver;
-    ISolver *twoOptimalSolver = new TwoOptimalSolver;
-    ISolver *antSolver = new AntSolver;
-    ISolver *branchAndBoundSolver = new BranchAndBoundSolver;
+    ISolver *bruteForce = new BruteforceSolver(g);
+    ISolver *annealingSolver = new AnnealingSolver(g);
+    ISolver *closestNeighbourSolver = new ClosestNeighbourSolver(g);
+    ISolver *twoOptimalSolver = new TwoOptimalSolver(g);
+    ISolver *antSolver = new AntSolver(g);
+    ISolver *branchAndBoundSolver = new BranchAndBoundSolver(g);
 
 
-    std::cout << "Brute force have found this answer: " << bruteForce->solve(g) << std::endl;
-    std::cout << "Annealing imitation have found this answer: " << annealingSolver->solve(g) << endl;
-    std::cout << "Closest neighbor have found this answer: " << closestNeighbourSolver->solve(g) << endl;
-    std::cout << "2-OPT greedy solution have found this answer: " << twoOptimalSolver->solve(g) << endl;
-    std::cout << "Ant algorithm have found this answer: " << antSolver->solve(g) << endl;
-    std::cout << "Branch and bound have found this answer: " << branchAndBoundSolver->solve(g) << endl;
+    cout << "Brute force have found this answer: " << bruteForce->solve() << endl;
+    cout << "Annealing imitation have found this answer: " << annealingSolver->solve() << endl;
+    cout << "Closest neighbor have found this answer: " << closestNeighbourSolver->solve() << endl;
+    cout << "2-OPT greedy solution have found this answer: " << twoOptimalSolver->solve() << endl;
+    cout << "Ant algorithm have found this answer: " << antSolver->solve() << endl;
+    cout << "Branch and bound have found this answer: " << branchAndBoundSolver->solve() << endl;
+
+    cout << "Brute force len: " << bruteForce->getPath().size() << endl;
+    cout << "Annealing imitation len: " << annealingSolver->getPath().size() << endl;
+    cout << "Closest neighbor len: " << closestNeighbourSolver->getPath().size() << endl;
+    cout << "2-OPT greedy solution len: " << twoOptimalSolver->getPath().size() << endl;
+    cout << "Ant algorithm len: " << antSolver->getPath().size() << endl;
+    cout << "Branch and bound len: " << branchAndBoundSolver->getPath().size() << endl;
     //fout.open("graph.txt");
     /*if (argc > 2) {
         ALPHA = stof(argv[2]);
@@ -52,3 +64,5 @@ int main(int argc, char *argv[]) {
     }
      */
 }
+
+#pragma clang diagnostic pop

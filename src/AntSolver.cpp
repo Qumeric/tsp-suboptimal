@@ -1,11 +1,12 @@
 #include <vector>
 #include <algorithm>
 #include <Graph.h>
+#include <Helpers.h>
 #include "AntSolver.h"
 
 using namespace std;
 
-double AntSolver::rec_ant(const Graph &g, size_t current_vertex, vector<bool> &used, vector<size_t> &path, size_t beg,
+double AntSolver::rec_ant(size_t current_vertex, vector<bool> &used, vector<size_t> &path, size_t beg,
                           double dist, size_t cnt) {
     size_t n = g.getSize();
     path.push_back(current_vertex);
@@ -28,17 +29,16 @@ double AntSolver::rec_ant(const Graph &g, size_t current_vertex, vector<bool> &u
     // Always returns
     for (size_t i = 0; i < n; i++) {
         if (var < prob[i]) {
-            return rec_ant(g, i, used, path, beg, dist + g.getDistance(current_vertex, i), cnt + 1);
+            return rec_ant(i, used, path, beg, dist + g.getDistance(current_vertex, i), cnt + 1);
         }
     }
 }
 
 
-double AntSolver::solve(const Graph &g, size_t initial_vertex) { // Initial vertex do not affect anything
+double AntSolver::solve(size_t initial_vertex) { // initial_vertex do not affect anything
     double ans = INF;
     size_t n = g.getSize();
     vector<bool> used(n);
-    vector<size_t> path;
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < n; j++) {
             phero[i][j] = Helpers::get_random(1, MAX_PHEROMONE_INIT);
@@ -47,8 +47,11 @@ double AntSolver::solve(const Graph &g, size_t initial_vertex) { // Initial vert
     size_t v;
     for (size_t iter = 0; iter < ITER_COUNT; iter++) {
         v = rand() % n;
-        double len = rec_ant(g, v, used, path, v);
-        ans = min(ans, len);
+        double len = rec_ant(v, used, path, v);
+        if (len < ans) {
+            ans = len;
+            best_path = vector<size_t>(path.begin(), path.end() - 1);
+        }
         phero[path[0]][path[n]] *= (1 - FORGET);
         phero[path[0]][path[n]] += Q / len;
         for (size_t i = 0; i < n; i++) {
@@ -58,5 +61,5 @@ double AntSolver::solve(const Graph &g, size_t initial_vertex) { // Initial vert
         path.clear();
         fill(used.begin(), used.end(), false);
     }
-    return ans;
+    return answer = ans;
 }

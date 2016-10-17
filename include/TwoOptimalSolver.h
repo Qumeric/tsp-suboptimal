@@ -7,7 +7,10 @@
 #include "MST.h"
 
 class TwoOptimalSolver : public ISolver {
-    double solve(const Graph &g, size_t initial_vertex);
+public:
+    using ISolver::ISolver;
+
+    double solve(size_t initial_vertex);
 };
 
 #endif // TSP_SUBOPTIMAL_TWOOPTIMAL_H

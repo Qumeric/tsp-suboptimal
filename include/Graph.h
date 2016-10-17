@@ -5,7 +5,6 @@
 #include <cstddef>
 #include <vector>
 #include "Point.h"
-#include "Helpers.h"
 
 using std::vector;
 

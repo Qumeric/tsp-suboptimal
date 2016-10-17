@@ -4,8 +4,9 @@
 #include <ClosestNeighbourSolver.h>
 
 double
-ClosestNeighbourSolver::solve_rec(const Graph &g, vector<bool> &used, size_t current_vertex, size_t initial_vertex,
+ClosestNeighbourSolver::solve_rec(vector<bool> &used, size_t current_vertex, size_t initial_vertex,
                                   double len) {
+    best_path.push_back(current_vertex);
     size_t n = g.getSize();
     size_t i = 0;
     // Find first unused vertex
@@ -20,11 +21,11 @@ ClosestNeighbourSolver::solve_rec(const Graph &g, vector<bool> &used, size_t cur
             closestNeighbour = i;
     }
     used[closestNeighbour] = true;
-    return solve_rec(g, used, closestNeighbour, initial_vertex, len + g.getDistance(current_vertex, closestNeighbour));
+    return solve_rec(used, closestNeighbour, initial_vertex, len + g.getDistance(current_vertex, closestNeighbour));
 }
 
-double ClosestNeighbourSolver::solve(const Graph &g, size_t initial_vertex) {
+double ClosestNeighbourSolver::solve(size_t initial_vertex) {
     vector<bool> used(g.getSize());
     used[initial_vertex] = true;
-    return solve_rec(g, used, initial_vertex, initial_vertex, 0);
+    return answer = solve_rec(used, initial_vertex, initial_vertex, 0);
 }

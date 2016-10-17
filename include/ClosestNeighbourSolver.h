@@ -6,10 +6,12 @@
 
 class ClosestNeighbourSolver : public ISolver {
 private:
-    double solve_rec(const Graph &g, vector<bool> &used, size_t current_vertex, size_t initial_vertex, double len = 0);
+    double solve_rec(vector<bool> &used, size_t current_vertex, size_t initial_vertex, double len = 0);
 
 public:
-    double solve(const Graph &, size_t initial_vertex = 0) override;
+    using ISolver::ISolver;
+
+    double solve(size_t initial_vertex = 0) override;
 };
 
 #endif // TSP_SUBOPTIMAL_CLOSESTNEIGHBOUR_H

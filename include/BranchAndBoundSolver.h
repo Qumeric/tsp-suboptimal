@@ -11,10 +11,11 @@ private:
     vector<bool> used;
     vector<size_t> path;
     double ans = INF; // FIXME use first approx
-    vector<size_t> best_path;
 
-    double solve_(const Graph& g, size_t current_vertex = 0, double weight = 0, size_t initial_vertex = 0);
+    double solve_(size_t current_vertex = 0, double weight = 0, size_t initial_vertex = 0);
 public:
-    double solve(const Graph&, size_t initial_vertex = 0);
+    using ISolver::ISolver;
+
+    double solve(size_t initial_vertex = 0);
 };
 #endif // TSP_SUBOPTIMAL_BRANCHANDBOUND_H
