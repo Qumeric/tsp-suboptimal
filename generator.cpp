@@ -10,6 +10,7 @@
 #include "closestN.h"
 #include "ant.h"
 #include "annealing.h"
+#include "mst.h"
 
 using namespace std;
 
@@ -20,8 +21,11 @@ inline double distance(Point a, Point b) {
 }
 
 int main(int argc, char *argv[]) {
-    //fout.open("graph.txt");
-    //cout << "Enter the number of points: ";
+    if (argc == 1) {
+        cout << "Usage ./salesman <number-of-points>" << endl;
+        return 0;
+    }
+    fout.open("graph.txt");
     n = stoi(argv[1]);
     if (argc > 2) {
         ALPHA = stof(argv[2]);
@@ -34,15 +38,14 @@ int main(int argc, char *argv[]) {
     for (size_t i = 0; i < n; i++) {
         Point point = {get_random(MAX_CORD), get_random(MAX_CORD)}; // FIXME do something sane
         points[i] = point;
-        //cerr << "Point number " << i << " is (" << point.X << ", " << point.Y << ")" << endl;
-        //fout << point.X << ' ' << point.Y << endl;
+        cerr << "Point number " << i << " is (" << point.X << ", " << point.Y << ")" << endl;
+        fout << point.X << ' ' << point.Y << endl;
     }
-    //fout << ";" << endl;
+    fout << ";" << endl;
 
     for (size_t i = 0; i < n; i++) {
         for (size_t j = i + 1; j < n; j++) {
             graph[i][j] = graph[j][i] = distance(points[i], points[j]);
-            //cerr << "Distance between " << i << " and " << j << " is " << graph[i][j] << endl;
         }
     }
 

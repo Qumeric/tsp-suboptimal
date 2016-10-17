@@ -3,8 +3,8 @@ CFLAGS=-Wall --std=c++14
 
 all: bin/salesman
 
-bin/salesman: bin/generator.o bin/solver.o bin/bruteforce.o bin/closestN.o bin/ant.o bin/annealing.o
-	$(CC) $(CFLAGS) bin/generator.o bin/solver.o bin/bruteforce.o bin/closestN.o bin/ant.o bin/annealing.o -o bin/salesman
+bin/salesman: bin/generator.o bin/solver.o bin/bruteforce.o bin/closestN.o bin/ant.o bin/annealing.o bin/mst.o bin/helpers.o
+	$(CC) $(CFLAGS) bin/generator.o bin/solver.o bin/bruteforce.o bin/closestN.o bin/ant.o bin/annealing.o bin/mst.o bin/helpers.o -o bin/salesman
 
 bin/generator.o:
 	$(CC) $(CFLAGS) -c generator.cpp -o bin/generator.o
@@ -23,6 +23,12 @@ bin/ant.o:
 
 bin/annealing.o:
 	$(CC) $(CFLAGS) -c annealing.cpp -o bin/annealing.o
+
+bin/mst.o:
+	$(CC) $(CFLAGS) -c mst.cpp -o bin/mst.o
+
+bin/helpers.o:
+	$(CC) $(CFLAGS) -c helpers.cpp -o bin/helpers.o
 
 clean:
 	rm bin/*

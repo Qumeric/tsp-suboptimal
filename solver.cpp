@@ -2,80 +2,21 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include "mst.h"
 #include "solver.h"
+#include "helpers.h"
 
 using namespace std;
 
-double graph[MAX_SIZE][MAX_SIZE];
 vector<Point> points;
 ofstream fout;
 
-void print_tree(vector<vector<size_t>>& tree, size_t v, size_t margin) {
-    for(int i = 0; i < margin; i++) cerr << ' ';
-    cerr << v << " = (" << points[v].X << ", " << points[v].Y << ")" << endl;
-    for (size_t u: tree[v]) {
-        print_tree(tree, u, margin+1);
-    }
-}
-
-double LAST_MST_LEN = 0; // FIXME dirty
-vector<vector<size_t>> get_mst(double graph[MAX_SIZE][MAX_SIZE], size_t v, size_t n, const vector<size_t> &banned) {
-    vector<bool> used(n);
-    vector<pair<double, double>> dist(n);
-    vector<vector<size_t>> mst(n);
-    double len = 0; // FIXME do i need it?
-
-    used[v] = true;
-    //for (size_t u: banned)
-    //    used[u] = true;
-
-    for (size_t i = 0; i < n; i++)
-        dist[i] = {graph[v][i], v};
-
-    double ans = 0;
-    for(size_t k = 1; k < n-banned.size(); k++) {
-        size_t i = 0;
-        while(used[i]) ++i;
-        size_t nxt = i;
-        while(++i < n)
-            if (!used[i] && dist[i].first < dist[nxt].first)
-                nxt = i;
-        used[nxt] = true;
-        len += dist[nxt].first;
-        mst[dist[nxt].second].push_back(nxt);
-        cerr << "add  mst edge: " << dist[nxt].second << ' ' << nxt << endl;
-        for (size_t i = 0; i < n; i++) {
-            if (graph[nxt][i] < dist[i].first)
-                dist[i] = {graph[nxt][i], nxt};
-        }
-    }
-
-    cerr << "MST: " << endl;
-    print_tree(mst, v);
-
-    LAST_MST_LEN = len;
-
-    cerr << "MST length is " << len << endl;
-
-    return mst;
-}
-
-
-void get_euler_cycle(vector<vector<size_t>>& tree, size_t v, vector<size_t>& answer) {
-    cerr << "GET EULER CYCLE CALL " << v <<  endl;
-    answer.push_back(v);
-    for (size_t u: tree[v]) {
-        get_euler_cycle(tree, u, answer);
-        answer.push_back(v);
-    }
-}
+double graph[MAX_SIZE][MAX_SIZE];
 
 double solve_optimal20(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t v) {
     vector<vector<size_t>> mst = get_mst(graph, v, n);
-    vector<size_t> euler_cycle;
-    get_euler_cycle(mst, v, euler_cycle); // FIXME inconsistent interface?
+    vector<size_t> euler_cycle = Helpers::get_euler_cycle(mst, v);
 
-    cerr << "EULER CYCLE: " << endl;
     for (size_t u: euler_cycle) {
         cerr << u << ' ';
     } cerr << endl;
@@ -100,7 +41,7 @@ double solve_optimal20(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t v) {
 }
 
 
-// FIXME DIIIIRTY
+// FIXME DIIIIRTY and doesn't really works
 vector<size_t> path;
 bool used[MAX_SIZE]; // FIXME
 double ans = 1e9; // FIXME use first approx
@@ -109,16 +50,17 @@ double solve_branch_and_bound(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t
     used[v] = true;
     path.push_back(v);
     bool found = false;
+    double mst_len = 0;
     if (v == beg) {
-        get_mst(graph, v, n);
-        ans = LAST_MST_LEN * 1.5; // it's know that 1.5-optimal solution exists
+        get_mst(graph, v, n, mst_len);
+        ans = mst_len * 1.5; // it's known that 1.5-optimal solution exists
     }
 
     int mst_init = -1;
 
     // FIXME one vertex problem
     double shortestA = 1e9, shortestB = 1e9;
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         if (used[i]) continue;
         if (graph[beg][i] < shortestA) {
             shortestA = graph[beg][i];
@@ -130,14 +72,14 @@ double solve_branch_and_bound(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t
     if (mst_init >= 0) {
         cerr << "We are going to find mst from " << mst_init << " and with this path: ";
         for (size_t u: path) cerr << u << ' '; cerr << endl;
-        get_mst(graph, mst_init, n, path);
+        get_mst(graph, mst_init, n, mst_len, path);
         cerr << "DONE!" << endl;
     }
 
-    for (int i = 0; i < n; i++) { // FIXME randomized/sorted
+    for (size_t i = 0; i < n; i++) { // FIXME randomized/sorted
         if (!used[i]) {
             found = true;
-            if (w + shortestA + shortestB + LAST_MST_LEN < ans) {
+            if (w + shortestA + shortestB + mst_len < ans) {
                 solve_branch_and_bound(graph, n, i, w + graph[v][i]);
             }
         }

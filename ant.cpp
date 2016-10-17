@@ -24,7 +24,7 @@ double rec_ant(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t v, vector<bool
     }
     used[v] = true;
     vector<double> prob(n);
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         if (i != 0)
             prob[i] += prob[i-1];
         if (!used[i]) {
@@ -32,15 +32,14 @@ double rec_ant(double graph[MAX_SIZE][MAX_SIZE], size_t n, size_t v, vector<bool
         }
     }
 
-    // consider elite ants?
     double var = get_random(prob[n-1]);
 
-    for (int i = 0; i < n; i++) {
+    // Always returns
+    for (size_t i = 0; i < n; i++) {
         if (var < prob[i]) {
             return rec_ant(graph, n, i, used, path, beg, dist + graph[v][i], cnt+1);
         }
     }
-
 }
 
 
@@ -48,19 +47,19 @@ double solve_ant(double graph[MAX_SIZE][MAX_SIZE], size_t n) {
     double ans = 1e9;
     vector<bool> used(n);
     vector<size_t> path;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+    for (size_t i = 0; i < n; i++) {
+        for (size_t j = 0; j < n; j++) {
             phero[i][j] = get_random(1, MAX_PHEROMONE_INIT);
         }
     }
     size_t v;
-    for (int iter = 0; iter < ITER_COUNT; iter++) {
+    for (size_t iter = 0; iter < ITER_COUNT; iter++) {
         v = rand()%n;
         double len = rec_ant(graph, n, v, used, path, v);
         ans = min(ans, len);
         phero[path[0]][path[n]] *= (1-FORGET);
         phero[path[0]][path[n]] += Q/len;
-        for (int i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) {
             phero[path[i]][path[i+1]] *= (1-FORGET);
             phero[path[i]][path[i+1]] += Q/len;
         }

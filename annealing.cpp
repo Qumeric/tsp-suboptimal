@@ -7,7 +7,7 @@ using namespace std;
 
 double calc_length(double graph[MAX_SIZE][MAX_SIZE], vector<size_t>& cycle) {
     double ans = graph[cycle.back()][cycle.front()];
-    for (int i = 0; i < cycle.size()-1; i++) {
+    for (size_t i = 0; i < cycle.size()-1; i++) {
         ans += graph[cycle[i]][cycle[i+1]];
     }
     return ans;
@@ -40,9 +40,7 @@ double solve_annealing(double graph[MAX_SIZE][MAX_SIZE], size_t n) {
     double t = MAX_T;
     size_t i = 1;
     vector<size_t> cycle = gen_random_cycle(graph, n);
-    cerr << "GOT CYCLE" << endl;
     double d = calc_length(graph, cycle);
-    cerr << "CALCED LENGTH" << endl;
     while(t > 1) {
         t = MAX_T / i; // linear (may be bad)
         vector<size_t> candidate = mutate(cycle);
