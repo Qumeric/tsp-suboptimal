@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from subprocess import call
 n = input("Enter the number of points: ")
-call("g++ --std=c++14 solver.cpp generator.cpp -o salesman ", shell=True)
-call("./salesman " + n, shell=True) # CARE no sanitization!
+call("make clean && make", shell=True)
+call("./bin/salesman " + str(n), shell=True) # CARE no sanitization!
 
 MAX_CORD = 1000 * 1.02
 
