@@ -11,6 +11,7 @@
 #include <TwoOptimalSolver.h>
 #include <AntSolver.h>
 #include <BranchAndBoundSolver.h>
+#include <ClosestNeighbourCubicSolver.h>
 
 
 #pragma clang diagnostic push
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
     ISolver *twoOptimalSolver = new TwoOptimalSolver(g);
     ISolver *antSolver = new AntSolver(g);
     ISolver *branchAndBoundSolver = new BranchAndBoundSolver(g);
-
+    ISolver *closestNeighbourCubicSolver = new ClosestNeighbourCubicSolver(g);
 
     cout << "Brute force have found this answer: " << bruteForce->solve() << endl;
     cout << "Annealing imitation have found this answer: " << annealingSolver->solve() << endl;
@@ -41,6 +42,7 @@ int main(int argc, char *argv[]) {
     cout << "2-OPT greedy solution have found this answer: " << twoOptimalSolver->solve() << endl;
     cout << "Ant algorithm have found this answer: " << antSolver->solve() << endl;
     cout << "Branch and bound have found this answer: " << branchAndBoundSolver->solve() << endl;
+    cout << "Closest neighbour (cubic) have found this answer: " << closestNeighbourCubicSolver->solve() << endl;
 
     cout << "Brute force len: " << bruteForce->getPath().size() << endl;
     cout << "Annealing imitation len: " << annealingSolver->getPath().size() << endl;
@@ -48,6 +50,7 @@ int main(int argc, char *argv[]) {
     cout << "2-OPT greedy solution len: " << twoOptimalSolver->getPath().size() << endl;
     cout << "Ant algorithm len: " << antSolver->getPath().size() << endl;
     cout << "Branch and bound len: " << branchAndBoundSolver->getPath().size() << endl;
+    cout << "Closest neighbour (cubic) len: " << closestNeighbourCubicSolver->getPath().size() << endl;
     //fout.open("graph.txt");
     /*if (argc > 2) {
         ALPHA = stof(argv[2]);

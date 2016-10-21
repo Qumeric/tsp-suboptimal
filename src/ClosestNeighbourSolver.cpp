@@ -3,9 +3,8 @@
 #include <Graph.h>
 #include <ClosestNeighbourSolver.h>
 
-double
-ClosestNeighbourSolver::solve_rec(vector<bool> &used, size_t current_vertex, size_t initial_vertex,
-                                  double len) {
+double ClosestNeighbourSolver::solve_rec(vector<bool> &used, size_t current_vertex, size_t initial_vertex,
+                                         double len) {
     best_path.push_back(current_vertex);
     size_t n = g.getSize();
     size_t i = 0;

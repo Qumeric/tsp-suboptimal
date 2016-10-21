@@ -41,5 +41,4 @@ double MST::getLength() const {
 
 vector<vector<size_t>> MST::toAdjList() const {
     return mst;
-
 }

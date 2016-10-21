@@ -19,8 +19,17 @@ public:
 
     ISolver(const Graph &g) : g(g) {}
 
+    /**
+     * Solve Travelling Salesman Problem.
+     * @param initial_vertex first vertex in this path.
+     * @return length of shortest found hamiltonian cycle.
+     */
     virtual double solve(size_t initial_vertex = 0) = 0;
 
+    /**
+     * Get FIXME
+     * @return
+     */
     virtual vector<size_t> getPath() {
         if (best_path.empty())
             solve();
